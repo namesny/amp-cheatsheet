@@ -38,6 +38,18 @@ GROUP BY "day"
 ORDER BY "day"
 ```
 
+## List of Orders fulfilled in a day
+```
+SELECT date_trunc('day', "accepted_by_packer_at") AS day, wms_order_id, cell_id, packing_delivery_unit, fulfillment_start_at, accepted_by_packer_at
+FROM "multi_order" AS m
+JOIN "order_in_multi_order" AS oim ON "multi_order_id" = "m"."id"
+JOIN "order" AS o ON "oim"."order_id" = "o"."id"
+WHERE "m"."state" = 'accepted_in_packing' 
+AND "accepted_by_packer_at" >= '2021-10-01 00:00:00' 
+AND "accepted_by_packer_at" <= '2021-10-31 23:59:59' 
+ORDER BY "accepted_by_packer_at"
+```
+
 ## Average number of Orders in MultiOrder:
 ```
 SELECT AVG(c)
