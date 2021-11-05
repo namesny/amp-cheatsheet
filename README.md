@@ -64,6 +64,22 @@ GROUP BY "m"."id"
 ) AS tmp
 ```
 
+## Average number of Items (quantity) in Orders fulfilled on specific date
+```
+SELECT AVG(quantity)
+FROM (
+SELECT o.id, SUM(s.quantity) AS quantity
+FROM "multi_order" AS m
+JOIN "order_in_multi_order" AS oim ON "oim"."multi_order_id" = "m"."id"
+JOIN "order" AS o ON "o"."id" = "oim"."order_id"
+JOIN "sub_order" AS s ON "s"."order_id" = "o"."id"
+WHERE "m"."state" = 'accepted_in_packing' 
+AND "accepted_by_packer_at" >= '2021-11-05 00:00:00' 
+AND "accepted_by_packer_at" <= '2021-11-05 23:59:59'
+GROUP BY "o"."id"
+) as tmp
+```
+
 ## Average number of stops per MultiOrder:
 ```
 SELECT AVG(c)
