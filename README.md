@@ -121,6 +121,15 @@ AND "m"."accepted_by_packer_at" < '2021-11-02 23:59'
 ) AS tmp
 ```
 
+## WMS Order IDs for MultiOrder
+```
+SELECT multi_order_id, order_id, position_in_matrix, wms_order_id
+FROM multi_order AS m
+JOIN order_in_multi_order AS oim ON "m"."id" = "oim"."multi_order_id"
+JOIN "order" AS o ON "o"."id" = "oim"."order_id"
+WHERE "m"."id"=12831 
+```
+
 ## Stop all locked multi-orders
 Stop all MultiOrders that are locked. No new Runner shold be assigned / no MultiOrder started.
 
