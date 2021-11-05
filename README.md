@@ -130,6 +130,18 @@ JOIN "order" AS o ON "o"."id" = "oim"."order_id"
 WHERE "m"."id"=12831 
 ```
 
+## Boxes assigned to MultiOrder
+```
+SELECT DISTINCT b.*
+FROM box AS b
+JOIN fleet_command AS fc ON "b"."fleet_command_id" = "fc"."id"
+JOIN fleet_command_station AS fcs ON "fcs"."fleet_command_id" = "fc"."id"
+JOIN picker_command AS pc ON "pc"."id" = "fcs"."picker_command_id"
+JOIN sub_multi_order AS smo ON "smo"."id" = "pc"."sub_multi_order_id"
+WHERE "smo"."multi_order_id" = '12831'
+ORDER BY "b"."position_in_matrix"
+```
+
 ## Stop all locked multi-orders
 Stop all MultiOrders that are locked. No new Runner shold be assigned / no MultiOrder started.
 
