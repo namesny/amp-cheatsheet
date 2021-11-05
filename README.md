@@ -138,6 +138,101 @@ SET "state" = 'locked'
 WHERE "state" = 'failed';
 ```
 
+## Remove failed multiorders and retry
+Removes all failed multiorders and mark all connected orders as new to forece core to retry
+
+```
+--- 
+--- Alter 
+---
+WITH R as (
+    SELECT 
+        M.id as m_id, M.state as m_state,
+        O.id as o_id, O.state as o_state
+    FROM "multi_order" M
+        INNER JOIN "order_in_multi_order" OM ON OM.multi_order_id = M.id
+        INNER JOIN "order" O ON OM.order_id = O.id
+    WHERE 
+        M.state='failed' AND O.state='locked'
+)
+UPDATE
+    "order" AS O
+SET
+    state = 'new'
+FROM R
+WHERE 
+    O.id = R.o_id AND R.m_state = 'failed' and R.o_state = 'locked';
+
+---
+--- Clean up
+---
+DELETE FROM  
+    "picker_command" P
+USING 
+    "sub_multi_order" SM,
+    "multi_order" M
+WHERE 
+    SM.multi_order_id = M.id AND 
+    P.sub_multi_
+    "multi_order" M
+WHERE 
+    SM.multi_order_id = M.id AND 
+    M.state='failed';
+
+---
+DELETE FROM
+    "external_command" EC
+USING 
+    "multi_order" M
+WHERE 
+    EC.multiorder_id = M.id AND
+    M.state='failed';
+
+---
+DELETE FROM 
+    "order_in_multi_order" OM
+USING
+    "multi_order" M
+WHERE 
+    M.state='failed' AND OM.multi_order_id = M.id;
+
+---
+DELETE FROM 
+    "multi_order"
+WHERE 
+    state='failed';
+DELETE FROM 
+    "sub_multi_order" SM 
+USING 
+    "multi_order" M
+WHERE 
+    SM.multi_order_id = M.id AND 
+    M.state='failed';
+
+---
+DELETE FROM
+    "external_command" EC
+USING 
+    "multi_order" M
+WHERE 
+    EC.multiorder_id = M.id AND
+    M.state='failed';
+
+---
+DELETE FROM 
+    "order_in_multi_order" OM
+USING
+    "multi_order" M
+WHERE 
+    M.state='failed' AND OM.multi_order_id = M.id;
+
+---
+DELETE FROM 
+    "multi_order"
+WHERE 
+    state='failed';
+```
+
 # Matrix Table
 
 ## Matrix Table does not store to slot
