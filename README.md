@@ -325,10 +325,8 @@ LIMIT 50```
 # Special Queries
 
 ## Find Order, that adds the most (maximizes) average quantity per stop to already chosen Orders
-```
-SELECT "o"."id" AS oid, AVG(quantity) AS avg
+```SELECT "o"."id" AS oid, AVG(quantity) AS avg
 FROM sub_order AS s, "order" AS o
 WHERE "s"."order_id" <= 2000 OR "s"."order_id" = "o"."id"
 GROUP BY o.id
-ORDER BY avg DESC
-```
+ORDER BY avg DESC```
