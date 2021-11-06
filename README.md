@@ -304,10 +304,12 @@ Solutions:
 
 ## Positions and open-times for Fleet Command
 
-```SELECT fcs.id, position_id, state, fleet_continue_request_id, fleet_position_id
+```
+SELECT fcs.id, position_id, state, fleet_continue_request_id, fleet_position_id
 FROM "fleet_command_station" AS fcs, "position" AS p
 WHERE "fleet_command_id" = '523' AND fcs.position_id = p.id
-LIMIT 50```
+LIMIT 50
+```
 
 # Packing
 ## Does Core know Runner has arrived to packing?
@@ -325,8 +327,10 @@ LIMIT 50```
 # Special Queries
 
 ## Find Order, that adds the most (maximizes) average quantity per stop to already chosen Orders
-```SELECT "o"."id" AS oid, AVG(quantity) AS avg
+```
+SELECT "o"."id" AS oid, AVG(quantity) AS avg
 FROM sub_order AS s, "order" AS o
 WHERE "s"."order_id" <= 2000 OR "s"."order_id" = "o"."id"
 GROUP BY o.id
-ORDER BY avg DESC```
+ORDER BY avg DESC
+```
