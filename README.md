@@ -334,3 +334,13 @@ WHERE "s"."order_id" <= 2000 OR "s"."order_id" = "o"."id"
 GROUP BY o.id
 ORDER BY avg DESC
 ```
+
+## Find Orders with minimal number of sectors
+```
+SELECT order_id, count(sub_order.sector_id) AS sector_count 
+FROM "order"
+JOIN "sub_order" ON "sub_order"."order_id" = "order"."id"
+WHERE "order".state = 'new' 
+GROUP BY order_id 
+ORDER BY sector_count
+```
