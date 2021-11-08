@@ -142,6 +142,17 @@ WHERE "smo"."multi_order_id" = '12831'
 ORDER BY "b"."position_in_matrix"
 ```
 
+### MultiOrder and SubMultiOrders assigned to Runner
+```
+SELECT *
+FROM runner AS r
+JOIN fleet_command AS fc ON "fc"."runner_id" = "r"."id"
+JOIN fleet_command_station AS fcs ON "fcs"."fleet_command_id" = "fc"."id"
+JOIN picker_command AS pc ON "pc"."id" = "fcs"."picker_command_id"
+JOIN sub_multi_order AS smo ON "smo"."id" = "pc"."sub_multi_order_id"
+WHERE "r"."id" = '19' AND "fc"."state" != 'success'
+```
+
 ## Stop all locked multi-orders
 Stop all MultiOrders that are locked. No new Runner shold be assigned / no MultiOrder started.
 
