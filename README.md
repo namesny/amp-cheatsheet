@@ -335,6 +335,10 @@ LIMIT 50
 ## Did EMANS accept `packing_request`?
 - Did EMANS send us packing finished notification?
 
+- Did we send command to Fleet?
+- Did Fleet acknowledged the command?
+- Did Fleet confirmed
+
 # Special Queries
 
 ## Find Order, that adds the most (maximizes) average quantity per stop to already chosen Orders
