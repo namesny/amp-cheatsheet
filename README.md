@@ -339,6 +339,13 @@ LIMIT 50
 - Did Fleet acknowledged the command?
 - Did Fleet confirmed
 
+# Locking
+
+## EMANS has MultiOrder locked, but we do not have command accepted
+They respond with HTTP 403 to out repeated requests.
+
+**Solution:** Set state of `external_command = accepted` and restart.
+
 # Special Queries
 
 ## Find Order, that adds the most (maximizes) average quantity per stop to already chosen Orders
@@ -359,6 +366,3 @@ WHERE "order".state = 'new'
 GROUP BY order_id 
 ORDER BY sector_count
 ```
-
-# Solution
-
