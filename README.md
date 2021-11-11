@@ -152,6 +152,17 @@ JOIN picker_command AS pc ON "pc"."id" = "fcs"."picker_command_id"
 JOIN sub_multi_order AS smo ON "smo"."id" = "pc"."sub_multi_order_id"
 WHERE "r"."id" = '19' AND "fc"."state" != 'success'
 ```
+### List of blocked slots and number of sub_multi_orders assigned to them
+```
+SELECT sector_id, smo.matrix_sorter_slot, count(*)
+FROM "sub_multi_order" smo
+join multi_order mo on mo.id = smo.multi_order_id
+where smo.state not in ('flushed_to_runner','scratched') and matrix_sorter_slot is not null
+and mo.state !='failed'
+group by smo.sector_id, smo.matrix_sorter_slot
+having  count(*) > 0
+order by sector_id
+```
 
 ## Stop all locked multi-orders
 Stop all MultiOrders that are locked. No new Runner shold be assigned / no MultiOrder started.
