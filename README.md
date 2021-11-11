@@ -346,6 +346,12 @@ They respond with HTTP 403 to out repeated requests.
 
 **Solution:** Set state of `external_command = accepted` and restart.
 
+## EMANS did not accept packing request for a long time, so that it stopped to retry
+
+**Solution:** 
+In `rc-2`: Set state of `external_command = request_failed_to_send` and wait few seconds for periodic checker.
+In future (`main`): Such error will be resend every 30s (config)
+
 # Special Queries
 
 ## Find Order, that adds the most (maximizes) average quantity per stop to already chosen Orders
