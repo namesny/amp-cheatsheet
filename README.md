@@ -359,3 +359,6 @@ WHERE "order".state = 'new'
 GROUP BY order_id 
 ORDER BY sector_count
 ```
+
+# Solution
+
