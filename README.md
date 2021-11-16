@@ -365,6 +365,10 @@ They respond with HTTP 403 to out repeated requests.
 In `rc-2`: Set state of `external_command = request_failed_to_send` and wait few seconds for periodic checker.
 In future (`main`): Such error will be resend every 30s (config)
 
+## Runner did not finish job, send other runner to complete the job
+- set `runner_id` in `fleet_command` to `null`
+- set assigned `external_command.state = request_failed_to_send`
+
 # Special Queries
 
 ## Find Order, that adds the most (maximizes) average quantity per stop to already chosen Orders
