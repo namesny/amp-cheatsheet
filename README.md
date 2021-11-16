@@ -131,6 +131,19 @@ WHERE "m"."id"=12831
 ```
 
 ## Boxes assigned to MultiOrder
+
+```
+SELECT DISTINCT b.barcode, b.fleet_command_id, b.position_in_matrix, b.runner_id
+FROM box AS b
+JOIN fleet_command AS fc ON "b"."fleet_command_id" = "fc"."id"
+JOIN fleet_command_station AS fcs ON "fcs"."fleet_command_id" = "fc"."id"
+JOIN picker_command AS pc ON "pc"."id" = "fcs"."picker_command_id"
+JOIN sub_multi_order AS smo ON "smo"."id" = "pc"."sub_multi_order_id"
+WHERE "smo"."multi_order_id" = '20405'
+ORDER BY "b"."position_in_matrix"
+```
+
+All box assignments (after every FleetContinue) - if everything is ok, only duplicates
 ```
 SELECT DISTINCT b.*
 FROM box AS b
