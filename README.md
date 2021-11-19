@@ -49,6 +49,7 @@ WHERE p.finished_at >= '2021-11-19 00:00:00'
 AND p.finished_at <= '2021-11-19 23:59:59'
 AND e.type = 'picking_unit_ready'
 GROUP BY sector_id, wms_sector_id
+ORDER BY sector_id
 ```
 
 ## Average pick time per sertor per hour of the day
@@ -62,7 +63,7 @@ WHERE p.finished_at >= '2021-11-19 00:00:00'
 AND p.finished_at <= '2021-11-19 23:59:59'
 AND e.type = 'picking_unit_ready'
 GROUP BY hour, sector_id, wms_sector_id
-
+ORDER BY hour, sector_id
 ```
 
 ## List of Orders fulfilled in a day
