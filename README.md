@@ -51,6 +51,19 @@ AND e.type = 'picking_unit_ready'
 GROUP BY sector_id, wms_sector_id
 ```
 
+## Average pick time per sertor per hour of the day
+```
+SELECT date_trunc('hour', finished_at) AS hour, sector_id, wms_sector_id, AVG(finished_at - accepted_at) AS avg_picker_time, COUNT(p.id) AS count
+FROM picker_command AS p
+JOIN external_command AS e ON picker_command_id = p.id
+JOIN sub_multi_order AS s ON p.sub_multi_order_id = s.id
+JOIN sector AS c ON c.id = s.sector_id
+WHERE p.finished_at >= '2021-11-19 00:00:00' 
+AND p.finished_at <= '2021-11-19 23:59:59'
+AND e.type = 'picking_unit_ready'
+GROUP BY hour, sector_id, wms_sector_id
+```
+
 ## List of Orders fulfilled in a day
 ```
 SELECT date_trunc('day', "accepted_by_packer_at") AS day, wms_order_id, cell_id, packing_delivery_unit, fulfillment_start_at, accepted_by_packer_at
