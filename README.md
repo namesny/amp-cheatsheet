@@ -40,7 +40,7 @@ ORDER BY "day"
 
 ## Average pick time per sector
 ```
-SELECT sector_id, wms_sector_id, AVG(finished_at - accepted_at)
+SELECT sector_id, wms_sector_id, AVG(finished_at - accepted_at), COUNT(p.id) AS count, MIN(finished_at - accepted_at) AS min_picker_cycle_time, MAX(finished_at - accepted_at) AS max_picker_cycle_time
 FROM picker_command AS p
 JOIN external_command AS e ON picker_command_id = p.id
 JOIN sub_multi_order AS s ON p.sub_multi_order_id = s.id
@@ -53,7 +53,7 @@ GROUP BY sector_id, wms_sector_id
 
 ## Average pick time per sertor per hour of the day
 ```
-SELECT date_trunc('hour', finished_at) AS hour, sector_id, wms_sector_id, AVG(finished_at - accepted_at) AS avg_picker_time, COUNT(p.id) AS count
+SELECT date_trunc('hour', finished_at) AS hour, sector_id, wms_sector_id, AVG(finished_at - accepted_at) AS avg_picker_cycle_time, COUNT(p.id) AS count, MIN(finished_at - accepted_at) AS min_picker_cycle_time, MAX(finished_at - accepted_at) AS max_picker_cycle_time
 FROM picker_command AS p
 JOIN external_command AS e ON picker_command_id = p.id
 JOIN sub_multi_order AS s ON p.sub_multi_order_id = s.id
@@ -62,6 +62,7 @@ WHERE p.finished_at >= '2021-11-19 00:00:00'
 AND p.finished_at <= '2021-11-19 23:59:59'
 AND e.type = 'picking_unit_ready'
 GROUP BY hour, sector_id, wms_sector_id
+
 ```
 
 ## List of Orders fulfilled in a day
