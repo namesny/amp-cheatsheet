@@ -66,6 +66,19 @@ GROUP BY hour, sector_id, wms_sector_id
 ORDER BY hour, sector_id
 ```
 
+## List sub-multi-orders stored in slots
+Picker commands = (sub multi orders, 1:1 relationship) stored in slots = there is store command for them, but not flush command = there is only one matrix sorter command.
+
+```
+SELECT * 
+FROM (
+SELECT picker_command_id, sector_id, COUNT(*) AS matrix_sorter_command_count
+FROM matrix_sorter_command
+GROUP BY picker_command_id, sector_id
+ORDER BY matrix_sorter_command_count) AS tmp
+WHERE matrix_sorter_command_count < 2
+```
+
 ## List of Orders fulfilled in a day
 ```
 SELECT date_trunc('day', "accepted_by_packer_at") AS day, wms_order_id, cell_id, packing_delivery_unit, fulfillment_start_at, accepted_by_packer_at
