@@ -79,6 +79,19 @@ ORDER BY matrix_sorter_command_count) AS tmp
 WHERE matrix_sorter_command_count < 2
 ```
 
+## Number of full slots per sector
+```
+SELECT sector_id, COUNT(*) full_slot_count
+FROM (
+SELECT picker_command_id, sector_id, COUNT(*) AS matrix_sorter_command_count
+FROM matrix_sorter_command
+GROUP BY picker_command_id, sector_id
+ORDER BY matrix_sorter_command_count) AS tmp
+WHERE matrix_sorter_command_count < 2
+GROUP BY sector_id
+ORDER BY sector_id
+```
+
 ## List of Orders fulfilled in a day
 ```
 SELECT date_trunc('day', "accepted_by_packer_at") AS day, wms_order_id, cell_id, packing_delivery_unit, fulfillment_start_at, accepted_by_packer_at
