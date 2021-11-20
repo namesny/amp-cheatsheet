@@ -421,7 +421,7 @@ In future (`main`): Such error will be resend every 30s (config)
 
 ## Runner did not finish job, send other runner to complete the job
 - set `runner_id` in `fleet_command` to `null`
-- set assigned `external_command.state = request_failed_to_send` and `last_failed_at` to `NOW()`
+- set assigned `external_command.state = request_failed_to_send` with (`fleet_start`) and `last_failed_at` to `NOW()`
 
 # Special Queries
 
