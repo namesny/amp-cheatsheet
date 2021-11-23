@@ -344,13 +344,15 @@ WHERE "sector_id" = <SECTOR_ID> AND pc.sub_multi_order_id = smo.id
 ```
 
 ### Did we send PickerComand?
-- TODO:
+- check table external_command, type=pick, is there a record for picker command? 
+- check Connector logs for pick_request message
  
 ### Did EMANS accept PickerCommand
-- TODO:
+- check table external_command, type=pick, is accepted_at time filled? 
 
 ### Did EMANS confirmed picking finished?
-- TODO:
+- chceck table **TODO:**
+- check Connector logs, find message 'matrix_picking_finished' 
 
 ## Matrix Table does no flush slot
 - Is there a goods stored in a slot?
