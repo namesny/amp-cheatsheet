@@ -104,6 +104,29 @@ AND "accepted_by_packer_at" <= '2021-10-31 23:59:59'
 ORDER BY "accepted_by_packer_at"
 ```
 
+As the query may become big and not fit into browser, it may be convenient to run it from shell:
+```
+YEAR=2021
+MONTH=11
+
+DBSERVER=10.5.185.13
+DBUSER=postgres
+export PGPASSWORD=matrixpick1
+
+SQL="SELECT date_trunc('day', accepted_by_packer_at) AS day, wms_order_id, cell_id, packing_delivery_unit, fulfillment_start_at, accepted_by_packer_at 
+FROM multi_order AS m
+JOIN order_in_multi_order AS oim ON multi_order_id = m.id
+JOIN \"order\" AS o ON oim.order_id = o.id
+WHERE m.state = 'accepted_in_packing' 
+AND accepted_by_packer_at >= '$YEAR-$MONTH-01 00:00:00' 
+AND accepted_by_packer_at <= '$YEAR-$MONTH-01 00:00:00'::timestamp + '1 month'::interval 
+ORDER BY accepted_by_packer_at"
+
+FILENAME="$YEAR-$MONTH-order-list.csv"
+psql -h $DBSERVER -U $DBUSER -w -c "$SQL" --no-align --csv -F=, matrixpick-core-planner > $FILENAME
+echo "Output written to file '$FILENAME'"
+```
+
 ## Average number of Orders in MultiOrder:
 ```
 SELECT AVG(c)
