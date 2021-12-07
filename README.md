@@ -232,6 +232,19 @@ WHERE "smo"."multi_order_id" = '12831'
 ORDER BY "b"."position_in_matrix"
 ```
 
+##Orders and boxes on Runner
+```
+SELECT DISTINCT "order".wms_order_id, "order".cell_id, box.barcode 
+FROM sub_multi_order
+JOIN picker_command ON picker_command.sub_multi_order_id = sub_multi_order.id
+JOIN fleet_command_station ON fleet_command_station.picker_command_id = picker_command.id
+JOIN fleet_command ON fleet_command_station.fleet_command_id = fleet_command.id
+JOIN box ON box.fleet_command_id = fleet_command.id
+JOIN order_in_multi_order ON (order_in_multi_order.multi_order_id = sub_multi_order.multi_order_id AND order_in_multi_order.position_in_matrix = box.position_in_matrix)
+JOIN "order" ON "order".id = order_in_multi_order.id
+WHERE sub_multi_order.multi_order_id = 11
+```
+
 ### MultiOrder and SubMultiOrders assigned to Runner
 ```
 SELECT *
@@ -416,24 +429,11 @@ LIMIT 50
 
 # Packing
 ## Does Core know Runner has arrived to packing?
-**TODO: What else?**
+E.g. Runner dies just before packing after collecting all items.
 - mark fleet_command_station as arrived
 - mark fleet_command as waiting at station
-
-Runner dies just before packing. We can send the Packing message to EMANS using Sandbox (http://10.5.185.11:8000/sandbox/matrix_orders_finished). Fill in data from following query for given multi order:
-
-**Orders and boxes on Runner**
-```
-SELECT DISTINCT "order".wms_order_id, "order".cell_id, box.barcode 
-FROM sub_multi_order
-JOIN picker_command ON picker_command.sub_multi_order_id = sub_multi_order.id
-JOIN fleet_command_station ON fleet_command_station.picker_command_id = picker_command.id
-JOIN fleet_command ON fleet_command_station.fleet_command_id = fleet_command.id
-JOIN box ON box.fleet_command_id = fleet_command.id
-JOIN order_in_multi_order ON (order_in_multi_order.multi_order_id = sub_multi_order.multi_order_id AND order_in_multi_order.position_in_matrix = box.position_in_matrix)
-JOIN "order" ON "order".id = order_in_multi_order.id
-WHERE sub_multi_order.multi_order_id = 11
-```
+- run `resume_flows` in CLI tool
+- check, that packing request was sent to EMANS
 
 ## Did we send `packing_request` to EMANS?
 - Check if ExternalCommand with type `pack` and multiorder_id exists 
