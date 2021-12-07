@@ -416,12 +416,13 @@ LIMIT 50
 
 # Packing
 ## Does Core know Runner has arrived to packing?
-Runner dies just before packing. We can send the Packing message to EMANS using Sandbox (http://10.5.185.11:8000/sandbox/matrix_orders_finished). Fill in data from following query for given multi order:
-
 **TODO: What else?**
 - mark fleet_command_station as arrived
 - mark fleet_command as waiting at station
 
+Runner dies just before packing. We can send the Packing message to EMANS using Sandbox (http://10.5.185.11:8000/sandbox/matrix_orders_finished). Fill in data from following query for given multi order:
+
+**Orders and boxes on Runner**
 ```
 SELECT DISTINCT "order".wms_order_id, "order".cell_id, box.barcode 
 FROM sub_multi_order
